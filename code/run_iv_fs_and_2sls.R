@@ -191,5 +191,42 @@ panel_iv <- panel_fs %>%
   # keep only presidential election years where we actually observe votes
   filter(!is.na(gop_two_party_share))
 
+dem_controls <- cy %>% select(county_fips, YEAR, hispanic_share, white_share, black_share, lt_hs_share, hs_share)
+panel_iv <- panel_iv %>% left_join(dem_controls, by = c("county_fips", "YEAR"))
+
+iv_total <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + pop_total + hispanic_share + white_share + lt_hs_share |
+    county_fips + YEAR |
+    foreign_flow_3y ~ Z,
+  data    = panel_iv,
+  cluster = ~county_fips
+)
+
+iv_high_A <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + pop_total + hispanic_share + white_share + lt_hs_share |
+    county_fips + YEAR |
+    d_fb_high_skill_a_3y ~ Z_higha,
+  data    = panel_iv,
+  cluster = ~county_fips
+)
+
+iv_low_B <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + pop_total + hispanic_share + white_share + lt_hs_share |
+    county_fips + YEAR |
+    d_fb_low_skill_b_3y ~ Z_lowb,
+  data    = panel_iv,
+  cluster = ~county_fips
+)
+
+iv_high_B <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + pop_total + hispanic_share + white_share + lt_hs_share |
+    county_fips + YEAR |
+    d_fb_high_skill_b_3y ~ Z_highb,
+  data    = panel_iv,
+  cluster = ~county_fips
+)
+
+## MODEL REGRESSION TABLE
+
 
 
