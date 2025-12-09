@@ -1,6 +1,8 @@
 # 0. Install any packages
 library(readr) 
 library(modelsummary)
+library(tidyr)
+library(fixest)
 
 # 1. Load Data
 cy <- read_csv("./data/acs_05_23.csv")
@@ -144,4 +146,50 @@ fs_high_B <- feols(
   cluster = ~county_fips
 )
 summary(fs_high_B)
+
+dir.create("./output/tables", recursive = TRUE, showWarnings = FALSE)
+first_stage_models <- list(
+  "Overall inflow"            = fs_overall,
+  "Low-skill inflow (A)"      = fs_low_A,
+  "High-skill inflow (A)"     = fs_high_A,
+  "Low-skill inflow (B)"      = fs_low_B,
+  "High-skill inflow (B)"     = fs_high_B
+)
+
+## SECOND STAGE
+
+vote_formatted <- vote_df %>%
+  select(
+    county_fips,
+    starts_with("gop_two_party_share_")
+  ) %>%
+  pivot_longer(
+    cols = starts_with("gop_two_party_share_"),
+    names_to = "election_year",
+    names_pattern = "gop_two_party_share_(\\d+)",
+    values_to = "gop_two_party_share"
+  ) %>%
+  mutate(
+    election_year = as.integer(election_year)
+  ) %>%
+  arrange(county_fips, election_year) %>%
+  group_by(county_fips) %>%
+  mutate(
+    gop_two_party_share_lag4 = lag(gop_two_party_share, 1)  # previous election
+  ) %>%
+  ungroup()
+
+panel_iv <- panel_fs %>%
+  mutate(
+    county_fips = as.integer(county_fips),
+    YEAR        = as.integer(YEAR)
+  ) %>%
+  left_join(
+    vote_formatted,
+    by = c("county_fips", "YEAR" = "election_year")
+  ) %>%
+  # keep only presidential election years where we actually observe votes
+  filter(!is.na(gop_two_party_share))
+
+
 
