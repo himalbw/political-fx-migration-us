@@ -1,0 +1,246 @@
+<!-- preamble start -->
+<!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_4vdu7fycup0qkqvvxxgi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+<!-- preamble end -->
+
+    <script>
+
+      function styleCell_4vdu7fycup0qkqvvxxgi(i, j, css_id) {
+          var table = document.getElementById("tinytable_4vdu7fycup0qkqvvxxgi");
+          var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+          if (cell) {
+              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
+              cell.classList.add(css_id);
+          } else {
+              console.warn(`Cell at (${i}, ${j}) not found.`);
+          }
+      }
+      function spanCell_4vdu7fycup0qkqvvxxgi(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_4vdu7fycup0qkqvvxxgi");
+        const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+        if (!targetCell) {
+          console.warn(`Cell at (${i}, ${j}) not found.`);
+        }
+
+        // Get all cells that need to be removed
+        const cellsToRemove = [];
+        for (let r = 0; r < rowspan; r++) {
+          for (let c = 0; c < colspan; c++) {
+            if (r === 0 && c === 0) continue; // Skip the target cell
+            const cell = table.querySelector(`[data-row="${i + r}"][data-col="${j + c}"]`);
+            if (cell) {
+              cellsToRemove.push(cell);
+            }
+          }
+        }
+
+        // Remove all cells
+        cellsToRemove.forEach(cell => cell.remove());
+
+        // Set rowspan and colspan of the target cell if it exists
+        if (targetCell) {
+          targetCell.rowSpan = rowspan;
+          targetCell.colSpan = colspan;
+        }
+      }
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '17', j: 3 }, { i: '17', j: 1 }, { i: '17', j: 2 }, { i: '17', j: 4 }, { i: '17', j: 5 },  ], css_id: 'tinytable_css_dzkv2hs6wdsgyzjw0iqc',}, 
+          { positions: [ { i: '10', j: 5 }, { i: '10', j: 2 }, { i: '10', j: 4 }, { i: '10', j: 1 }, { i: '10', j: 3 },  ], css_id: 'tinytable_css_qoyxm93lnhokqrdtkivp',}, 
+          { positions: [ { i: '4', j: 1 }, { i: '1', j: 1 }, { i: '3', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '6', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 }, { i: '14', j: 1 }, { i: '2', j: 1 }, { i: '16', j: 1 }, { i: '12', j: 2 }, { i: '5', j: 1 }, { i: '1', j: 2 }, { i: '7', j: 1 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '15', j: 1 }, { i: '11', j: 2 }, { i: '7', j: 3 }, { i: '13', j: 2 }, { i: '14', j: 2 }, { i: '2', j: 2 }, { i: '16', j: 2 }, { i: '12', j: 3 }, { i: '13', j: 3 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '2', j: 4 }, { i: '8', j: 3 }, { i: '9', j: 3 }, { i: '15', j: 2 }, { i: '11', j: 3 }, { i: '7', j: 4 }, { i: '8', j: 4 }, { i: '14', j: 3 }, { i: '15', j: 3 }, { i: '16', j: 3 }, { i: '12', j: 4 }, { i: '13', j: 4 }, { i: '1', j: 4 }, { i: '15', j: 4 }, { i: '3', j: 4 }, { i: '4', j: 4 }, { i: '5', j: 4 }, { i: '6', j: 4 }, { i: '2', j: 5 }, { i: '3', j: 5 }, { i: '9', j: 4 }, { i: '5', j: 5 }, { i: '11', j: 4 }, { i: '7', j: 5 }, { i: '8', j: 5 }, { i: '14', j: 4 }, { i: '1', j: 5 }, { i: '16', j: 4 }, { i: '12', j: 5 }, { i: '13', j: 5 }, { i: '9', j: 5 }, { i: '15', j: 5 }, { i: '16', j: 5 }, { i: '4', j: 5 }, { i: '6', j: 5 }, { i: '11', j: 5 }, { i: '14', j: 5 },  ], css_id: 'tinytable_css_q0gkj41nheugyh8q3w9s',}, 
+          { positions: [ { i: '0', j: 1 }, { i: '0', j: 2 }, { i: '0', j: 4 }, { i: '0', j: 5 }, { i: '0', j: 3 },  ], css_id: 'tinytable_css_m5nyd17xzdz6zs0yrwe6',}, 
+          { positions: [ { i: '17', j: 0 },  ], css_id: 'tinytable_css_ions4214kz8f4wg6h0v1',}, 
+          { positions: [ { i: '10', j: 0 },  ], css_id: 'tinytable_css_uaxy1fempqj0utkfymqk',}, 
+          { positions: [ { i: '1', j: 0 }, { i: '2', j: 0 }, { i: '3', j: 0 }, { i: '4', j: 0 }, { i: '5', j: 0 }, { i: '6', j: 0 }, { i: '7', j: 0 }, { i: '8', j: 0 }, { i: '9', j: 0 }, { i: '14', j: 0 }, { i: '11', j: 0 }, { i: '12', j: 0 }, { i: '13', j: 0 }, { i: '15', j: 0 }, { i: '16', j: 0 },  ], css_id: 'tinytable_css_ked3h99c1hy9676nyahu',}, 
+          { positions: [ { i: '0', j: 0 },  ], css_id: 'tinytable_css_edc31oao0qxe4nqtbyz0',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  styleCell_4vdu7fycup0qkqvvxxgi(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <style>
+      /* tinytable css entries after */
+      .table td.tinytable_css_dzkv2hs6wdsgyzjw0iqc, .table th.tinytable_css_dzkv2hs6wdsgyzjw0iqc { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_qoyxm93lnhokqrdtkivp, .table th.tinytable_css_qoyxm93lnhokqrdtkivp { text-align: center; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_q0gkj41nheugyh8q3w9s, .table th.tinytable_css_q0gkj41nheugyh8q3w9s { text-align: center; }
+      .table td.tinytable_css_m5nyd17xzdz6zs0yrwe6, .table th.tinytable_css_m5nyd17xzdz6zs0yrwe6 { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_ions4214kz8f4wg6h0v1, .table th.tinytable_css_ions4214kz8f4wg6h0v1 { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_uaxy1fempqj0utkfymqk, .table th.tinytable_css_uaxy1fempqj0utkfymqk { text-align: left; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_ked3h99c1hy9676nyahu, .table th.tinytable_css_ked3h99c1hy9676nyahu { text-align: left; }
+      .table td.tinytable_css_edc31oao0qxe4nqtbyz0, .table th.tinytable_css_edc31oao0qxe4nqtbyz0 { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_4vdu7fycup0qkqvvxxgi" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <thead>
+        <caption>First Stage Regressions: Shift-Share for 3-Year Inflows</caption>
+              <tr>
+                <th scope="col" data-row="0" data-col="0"> </th>
+                <th scope="col" data-row="0" data-col="1">Overall inflow</th>
+                <th scope="col" data-row="0" data-col="2">Low-skill inflow (A)</th>
+                <th scope="col" data-row="0" data-col="3">High-skill inflow (A)</th>
+                <th scope="col" data-row="0" data-col="4">Low-skill inflow (B)</th>
+                <th scope="col" data-row="0" data-col="5">High-skill inflow (B)</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan='6'>+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="0">Overall instrument Z</td>
+                  <td data-row="1" data-col="1">0.008**</td>
+                  <td data-row="1" data-col="2"></td>
+                  <td data-row="1" data-col="3"></td>
+                  <td data-row="1" data-col="4"></td>
+                  <td data-row="1" data-col="5"></td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="0"></td>
+                  <td data-row="2" data-col="1">(0.003)</td>
+                  <td data-row="2" data-col="2"></td>
+                  <td data-row="2" data-col="3"></td>
+                  <td data-row="2" data-col="4"></td>
+                  <td data-row="2" data-col="5"></td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="0">Low-skill instrument (A): Z_lowa</td>
+                  <td data-row="3" data-col="1"></td>
+                  <td data-row="3" data-col="2">0.004**</td>
+                  <td data-row="3" data-col="3"></td>
+                  <td data-row="3" data-col="4"></td>
+                  <td data-row="3" data-col="5"></td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="0"></td>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.002)</td>
+                  <td data-row="4" data-col="3"></td>
+                  <td data-row="4" data-col="4"></td>
+                  <td data-row="4" data-col="5"></td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="0">High-skill instrument (A): Z_higha</td>
+                  <td data-row="5" data-col="1"></td>
+                  <td data-row="5" data-col="2"></td>
+                  <td data-row="5" data-col="3">0.016**</td>
+                  <td data-row="5" data-col="4"></td>
+                  <td data-row="5" data-col="5"></td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="0"></td>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2"></td>
+                  <td data-row="6" data-col="3">(0.006)</td>
+                  <td data-row="6" data-col="4"></td>
+                  <td data-row="6" data-col="5"></td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="0">Low-skill instrument (B): Z_lowb</td>
+                  <td data-row="7" data-col="1"></td>
+                  <td data-row="7" data-col="2"></td>
+                  <td data-row="7" data-col="3"></td>
+                  <td data-row="7" data-col="4">0.006**</td>
+                  <td data-row="7" data-col="5"></td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="0"></td>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2"></td>
+                  <td data-row="8" data-col="3"></td>
+                  <td data-row="8" data-col="4">(0.002)</td>
+                  <td data-row="8" data-col="5"></td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="0">High-skill instrument (B): Z_highb</td>
+                  <td data-row="9" data-col="1"></td>
+                  <td data-row="9" data-col="2"></td>
+                  <td data-row="9" data-col="3"></td>
+                  <td data-row="9" data-col="4"></td>
+                  <td data-row="9" data-col="5">0.032***</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="0"></td>
+                  <td data-row="10" data-col="1"></td>
+                  <td data-row="10" data-col="2"></td>
+                  <td data-row="10" data-col="3"></td>
+                  <td data-row="10" data-col="4"></td>
+                  <td data-row="10" data-col="5">(0.009)</td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="0">Num.Obs.</td>
+                  <td data-row="11" data-col="1">6316</td>
+                  <td data-row="11" data-col="2">6316</td>
+                  <td data-row="11" data-col="3">6316</td>
+                  <td data-row="11" data-col="4">6316</td>
+                  <td data-row="11" data-col="5">6316</td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="0">R2</td>
+                  <td data-row="12" data-col="1">0.426</td>
+                  <td data-row="12" data-col="2">0.362</td>
+                  <td data-row="12" data-col="3">0.509</td>
+                  <td data-row="12" data-col="4">0.361</td>
+                  <td data-row="12" data-col="5">0.573</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="0">R2 Within</td>
+                  <td data-row="13" data-col="1">0.005</td>
+                  <td data-row="13" data-col="2">0.003</td>
+                  <td data-row="13" data-col="3">0.006</td>
+                  <td data-row="13" data-col="4">0.005</td>
+                  <td data-row="13" data-col="5">0.010</td>
+                </tr>
+                <tr>
+                  <td data-row="14" data-col="0">RMSE</td>
+                  <td data-row="14" data-col="1">9346.02</td>
+                  <td data-row="14" data-col="2">5260.03</td>
+                  <td data-row="14" data-col="3">7065.95</td>
+                  <td data-row="14" data-col="4">7236.69</td>
+                  <td data-row="14" data-col="5">5387.96</td>
+                </tr>
+                <tr>
+                  <td data-row="15" data-col="0">Std.Errors</td>
+                  <td data-row="15" data-col="1">by: county_fips</td>
+                  <td data-row="15" data-col="2">by: county_fips</td>
+                  <td data-row="15" data-col="3">by: county_fips</td>
+                  <td data-row="15" data-col="4">by: county_fips</td>
+                  <td data-row="15" data-col="5">by: county_fips</td>
+                </tr>
+                <tr>
+                  <td data-row="16" data-col="0">FE: county_fips</td>
+                  <td data-row="16" data-col="1">X</td>
+                  <td data-row="16" data-col="2">X</td>
+                  <td data-row="16" data-col="3">X</td>
+                  <td data-row="16" data-col="4">X</td>
+                  <td data-row="16" data-col="5">X</td>
+                </tr>
+                <tr>
+                  <td data-row="17" data-col="0">FE: YEAR</td>
+                  <td data-row="17" data-col="1">X</td>
+                  <td data-row="17" data-col="2">X</td>
+                  <td data-row="17" data-col="3">X</td>
+                  <td data-row="17" data-col="4">X</td>
+                  <td data-row="17" data-col="5">X</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- postamble start -->
+  </body>
+
+</html>
+<!-- postamble end -->
+<!-- hack to avoid NA insertion in last line -->
