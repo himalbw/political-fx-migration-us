@@ -1,0 +1,167 @@
+<!-- preamble start -->
+<!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_zfkbrn7b8g71ml4ahvzr</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+<!-- preamble end -->
+
+    <script>
+
+      function styleCell_zfkbrn7b8g71ml4ahvzr(i, j, css_id) {
+          var table = document.getElementById("tinytable_zfkbrn7b8g71ml4ahvzr");
+          var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+          if (cell) {
+              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
+              cell.classList.add(css_id);
+          } else {
+              console.warn(`Cell at (${i}, ${j}) not found.`);
+          }
+      }
+      function spanCell_zfkbrn7b8g71ml4ahvzr(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_zfkbrn7b8g71ml4ahvzr");
+        const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+        if (!targetCell) {
+          console.warn(`Cell at (${i}, ${j}) not found.`);
+        }
+
+        // Get all cells that need to be removed
+        const cellsToRemove = [];
+        for (let r = 0; r < rowspan; r++) {
+          for (let c = 0; c < colspan; c++) {
+            if (r === 0 && c === 0) continue; // Skip the target cell
+            const cell = table.querySelector(`[data-row="${i + r}"][data-col="${j + c}"]`);
+            if (cell) {
+              cellsToRemove.push(cell);
+            }
+          }
+        }
+
+        // Remove all cells
+        cellsToRemove.forEach(cell => cell.remove());
+
+        // Set rowspan and colspan of the target cell if it exists
+        if (targetCell) {
+          targetCell.rowSpan = rowspan;
+          targetCell.colSpan = colspan;
+        }
+      }
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '12', j: 1 }, { i: '12', j: 2 },  ], css_id: 'tinytable_css_sgy4qnnun7yvzz5fz3bh',}, 
+          { positions: [ { i: '6', j: 1 }, { i: '6', j: 2 },  ], css_id: 'tinytable_css_35prkaxm6fukssl2n38e',}, 
+          { positions: [ { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '1', j: 1 }, { i: '10', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '5', j: 1 }, { i: '1', j: 2 }, { i: '11', j: 1 }, { i: '3', j: 2 }, { i: '9', j: 1 }, { i: '5', j: 2 }, { i: '2', j: 2 }, { i: '7', j: 2 }, { i: '4', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '8', j: 2 },  ], css_id: 'tinytable_css_m8fpq4oemoi40ot8r9z9',}, 
+          { positions: [ { i: '0', j: 1 }, { i: '0', j: 2 },  ], css_id: 'tinytable_css_qum8168n8vxtwnseepdr',}, 
+          { positions: [ { i: '12', j: 0 },  ], css_id: 'tinytable_css_xzhyczdxg1rmyx26qtxc',}, 
+          { positions: [ { i: '6', j: 0 },  ], css_id: 'tinytable_css_xhw8qyi7h5tz09xwa7gz',}, 
+          { positions: [ { i: '1', j: 0 }, { i: '2', j: 0 }, { i: '3', j: 0 }, { i: '4', j: 0 }, { i: '5', j: 0 }, { i: '10', j: 0 }, { i: '7', j: 0 }, { i: '8', j: 0 }, { i: '9', j: 0 }, { i: '11', j: 0 },  ], css_id: 'tinytable_css_0liq98d96zt638pvo8wb',}, 
+          { positions: [ { i: '0', j: 0 },  ], css_id: 'tinytable_css_p08mi4ujdt6oprlqv8hv',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  styleCell_zfkbrn7b8g71ml4ahvzr(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <style>
+      /* tinytable css entries after */
+      .table td.tinytable_css_sgy4qnnun7yvzz5fz3bh, .table th.tinytable_css_sgy4qnnun7yvzz5fz3bh { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_35prkaxm6fukssl2n38e, .table th.tinytable_css_35prkaxm6fukssl2n38e { text-align: center; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_m8fpq4oemoi40ot8r9z9, .table th.tinytable_css_m8fpq4oemoi40ot8r9z9 { text-align: center; }
+      .table td.tinytable_css_qum8168n8vxtwnseepdr, .table th.tinytable_css_qum8168n8vxtwnseepdr { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_xzhyczdxg1rmyx26qtxc, .table th.tinytable_css_xzhyczdxg1rmyx26qtxc { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_xhw8qyi7h5tz09xwa7gz, .table th.tinytable_css_xhw8qyi7h5tz09xwa7gz { text-align: left; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_0liq98d96zt638pvo8wb, .table th.tinytable_css_0liq98d96zt638pvo8wb { text-align: left; }
+      .table td.tinytable_css_p08mi4ujdt6oprlqv8hv, .table th.tinytable_css_p08mi4ujdt6oprlqv8hv { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_zfkbrn7b8g71ml4ahvzr" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <thead>
+        <caption>2SLS Estimates: Low- and High-Skill Migrant Inflows (per 10,000) and GOP Two-Party Vote Share</caption>
+              <tr>
+                <th scope="col" data-row="0" data-col="0"> </th>
+                <th scope="col" data-row="0" data-col="1">Low &amp; High inflow (A, IV)</th>
+                <th scope="col" data-row="0" data-col="2">Low &amp; High inflow (B, IV)</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan='3'>+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="0">High-skill inflow (3Y) / 10,000</td>
+                  <td data-row="1" data-col="1">−0.103</td>
+                  <td data-row="1" data-col="2">−0.219</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="0"></td>
+                  <td data-row="2" data-col="1">(0.137)</td>
+                  <td data-row="2" data-col="2">(0.655)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="0">Low-skill inflow (3Y) / 10,000</td>
+                  <td data-row="3" data-col="1">0.122</td>
+                  <td data-row="3" data-col="2">0.183</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="0"></td>
+                  <td data-row="4" data-col="1">(0.241)</td>
+                  <td data-row="4" data-col="2">(0.601)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="0">GOP share, last election</td>
+                  <td data-row="5" data-col="1">0.585***</td>
+                  <td data-row="5" data-col="2">0.466</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="0"></td>
+                  <td data-row="6" data-col="1">(0.152)</td>
+                  <td data-row="6" data-col="2">(0.296)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="0">Num.Obs.</td>
+                  <td data-row="7" data-col="1">1605</td>
+                  <td data-row="7" data-col="2">1605</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="0">R2</td>
+                  <td data-row="8" data-col="1">0.973</td>
+                  <td data-row="8" data-col="2">0.973</td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="0">R2 Within</td>
+                  <td data-row="9" data-col="1">0.337</td>
+                  <td data-row="9" data-col="2">0.336</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="0">Std.Errors</td>
+                  <td data-row="10" data-col="1">by: county_fips</td>
+                  <td data-row="10" data-col="2">by: county_fips</td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="0">FE: county_fips</td>
+                  <td data-row="11" data-col="1">X</td>
+                  <td data-row="11" data-col="2">X</td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="0">FE: YEAR</td>
+                  <td data-row="12" data-col="1">X</td>
+                  <td data-row="12" data-col="2">X</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- postamble start -->
+  </body>
+
+</html>
+<!-- postamble end -->
+<!-- hack to avoid NA insertion in last line -->

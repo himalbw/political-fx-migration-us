@@ -2,12 +2,13 @@ library(ggplot2)
 library(purrr)
 panel_iv <- read_csv("./data/panel_iv.csv")
 df <- panel_iv %>% select(gop_two_party_share, gop_two_party_share_lag4, pop_total, )
+panel_iv$trump <- ifelse(panel_iv$YEAR %in% c(2016, 2024), 1, 0)
 
 m_low_B_fit_year <- feols(
   gop_two_party_share ~
     gop_two_party_share_lag4 +
     pop_total + hispanic_native_share + white_share + native_lt_hs_share +
-    fit_low_B * factor(YEAR) |     # <-- year-by-fit interactions here
+    fit_low_B_10k * factor(YEAR) |     # <-- year-by-fit interactions here
     county_fips,                   # FE only for county
   data    = panel_iv,
   cluster = ~county_fips
