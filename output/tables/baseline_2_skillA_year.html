@@ -1,0 +1,173 @@
+<!-- preamble start -->
+<!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_gmsn7wt2b487yyj6yq7v</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+<!-- preamble end -->
+
+    <script>
+
+      function styleCell_gmsn7wt2b487yyj6yq7v(i, j, css_id) {
+          var table = document.getElementById("tinytable_gmsn7wt2b487yyj6yq7v");
+          var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+          if (cell) {
+              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
+              cell.classList.add(css_id);
+          } else {
+              console.warn(`Cell at (${i}, ${j}) not found.`);
+          }
+      }
+      function spanCell_gmsn7wt2b487yyj6yq7v(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_gmsn7wt2b487yyj6yq7v");
+        const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+        if (!targetCell) {
+          console.warn(`Cell at (${i}, ${j}) not found.`);
+        }
+
+        // Get all cells that need to be removed
+        const cellsToRemove = [];
+        for (let r = 0; r < rowspan; r++) {
+          for (let c = 0; c < colspan; c++) {
+            if (r === 0 && c === 0) continue; // Skip the target cell
+            const cell = table.querySelector(`[data-row="${i + r}"][data-col="${j + c}"]`);
+            if (cell) {
+              cellsToRemove.push(cell);
+            }
+          }
+        }
+
+        // Remove all cells
+        cellsToRemove.forEach(cell => cell.remove());
+
+        // Set rowspan and colspan of the target cell if it exists
+        if (targetCell) {
+          targetCell.rowSpan = rowspan;
+          targetCell.colSpan = colspan;
+        }
+      }
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '13', j: 1 }, { i: '13', j: 2 },  ], css_id: 'tinytable_css_g1vatcpoalk6c22wv60l',}, 
+          { positions: [ { i: '10', j: 1 }, { i: '10', j: 2 },  ], css_id: 'tinytable_css_3cr71g6mvjpjdone4ijb',}, 
+          { positions: [ { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '9', j: 2 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '12', j: 2 }, { i: '1', j: 1 }, { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '11', j: 2 },  ], css_id: 'tinytable_css_uydllhmkpo4ahk2de3r7',}, 
+          { positions: [ { i: '0', j: 1 }, { i: '0', j: 2 },  ], css_id: 'tinytable_css_v5h8f7x3350t8vnglji6',}, 
+          { positions: [ { i: '13', j: 0 },  ], css_id: 'tinytable_css_tfysdqun5ekwid4666x3',}, 
+          { positions: [ { i: '10', j: 0 },  ], css_id: 'tinytable_css_txma1t6pljaz07bx8yxi',}, 
+          { positions: [ { i: '1', j: 0 }, { i: '2', j: 0 }, { i: '3', j: 0 }, { i: '4', j: 0 }, { i: '5', j: 0 }, { i: '6', j: 0 }, { i: '7', j: 0 }, { i: '8', j: 0 }, { i: '9', j: 0 }, { i: '11', j: 0 }, { i: '12', j: 0 },  ], css_id: 'tinytable_css_ur7yzepjbcf3b4z7zftb',}, 
+          { positions: [ { i: '0', j: 0 },  ], css_id: 'tinytable_css_nf3w8xgxf4f4wip5axtb',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  styleCell_gmsn7wt2b487yyj6yq7v(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <style>
+      /* tinytable css entries after */
+      .table td.tinytable_css_g1vatcpoalk6c22wv60l, .table th.tinytable_css_g1vatcpoalk6c22wv60l { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_3cr71g6mvjpjdone4ijb, .table th.tinytable_css_3cr71g6mvjpjdone4ijb { text-align: center; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_uydllhmkpo4ahk2de3r7, .table th.tinytable_css_uydllhmkpo4ahk2de3r7 { text-align: center; }
+      .table td.tinytable_css_v5h8f7x3350t8vnglji6, .table th.tinytable_css_v5h8f7x3350t8vnglji6 { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_tfysdqun5ekwid4666x3, .table th.tinytable_css_tfysdqun5ekwid4666x3 { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_txma1t6pljaz07bx8yxi, .table th.tinytable_css_txma1t6pljaz07bx8yxi { text-align: left; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_ur7yzepjbcf3b4z7zftb, .table th.tinytable_css_ur7yzepjbcf3b4z7zftb { text-align: left; }
+      .table td.tinytable_css_nf3w8xgxf4f4wip5axtb, .table th.tinytable_css_nf3w8xgxf4f4wip5axtb { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_gmsn7wt2b487yyj6yq7v" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <thead>
+        <caption>Model 2: Year-Varying Effects of Skill-Split A Migrant Inflows (per 10,000) on GOP Two-Party Vote Share</caption>
+              <tr>
+                <th scope="col" data-row="0" data-col="0"> </th>
+                <th scope="col" data-row="0" data-col="1">2A (Low-skill A × Year)</th>
+                <th scope="col" data-row="0" data-col="2">3A (High-skill A × Year)</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan='3'>+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr>
+<tr><td colspan='3'>Coefficients reported reflect the change in GOP two-party vote share associated with a 10,000-person increase in 3-year migrant inflows; interaction terms reflect year-specific effects.</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="0">Δ Skilled Migrant Stock (3Y) per 10,000</td>
+                  <td data-row="1" data-col="1">−0.000</td>
+                  <td data-row="1" data-col="2">−0.001</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="0"></td>
+                  <td data-row="2" data-col="1">(0.003)</td>
+                  <td data-row="2" data-col="2">(0.003)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="0">Δ Migrants x 2012</td>
+                  <td data-row="3" data-col="1">−0.005</td>
+                  <td data-row="3" data-col="2">−0.001</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="0"></td>
+                  <td data-row="4" data-col="1">(0.004)</td>
+                  <td data-row="4" data-col="2">(0.002)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="0">Δ Migrants x 2016</td>
+                  <td data-row="5" data-col="1">−0.001</td>
+                  <td data-row="5" data-col="2">−0.010***</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="0"></td>
+                  <td data-row="6" data-col="1">(0.004)</td>
+                  <td data-row="6" data-col="2">(0.003)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="0">Δ Migrants x 2020</td>
+                  <td data-row="7" data-col="1">−0.006+</td>
+                  <td data-row="7" data-col="2">0.001</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="0"></td>
+                  <td data-row="8" data-col="1">(0.003)</td>
+                  <td data-row="8" data-col="2">(0.003)</td>
+                </tr>
+                <tr>
+                  <td data-row="9" data-col="0">Δ Migrants x 2024</td>
+                  <td data-row="9" data-col="1">0.002</td>
+                  <td data-row="9" data-col="2">−0.000</td>
+                </tr>
+                <tr>
+                  <td data-row="10" data-col="0"></td>
+                  <td data-row="10" data-col="1">(0.004)</td>
+                  <td data-row="10" data-col="2">(0.003)</td>
+                </tr>
+                <tr>
+                  <td data-row="11" data-col="0">Num.Obs.</td>
+                  <td data-row="11" data-col="1">1605</td>
+                  <td data-row="11" data-col="2">1605</td>
+                </tr>
+                <tr>
+                  <td data-row="12" data-col="0">Std.Errors</td>
+                  <td data-row="12" data-col="1">by: county_fips</td>
+                  <td data-row="12" data-col="2">by: county_fips</td>
+                </tr>
+                <tr>
+                  <td data-row="13" data-col="0">FE: county_fips</td>
+                  <td data-row="13" data-col="1">X</td>
+                  <td data-row="13" data-col="2">X</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- postamble start -->
+  </body>
+
+</html>
+<!-- postamble end -->
+<!-- hack to avoid NA insertion in last line -->
