@@ -315,7 +315,7 @@ modelsummary(
   output    = "output/tables/baseline_2_skillAB_year.html"
 )
 
-panel_iv <- read_csv(".data/panel_iv.csv")
+panel_iv <- read_csv("./data/panel_iv.csv")
 panel_iv <- panel_iv %>%
   mutate(
     all_10k    = foreign_flow_3y      / 10000,
@@ -394,5 +394,72 @@ modelsummary(
   title     = "OLS: Fitted 3-Year Migrant Inflows and Trump-Era Differences in GOP Vote Share",
   output    = "output/tables/ols_trump_interactions.html"
 )
+
+panel_iv <- read_csv("./data/panel_iv.csv")
+
+panel_iv <- panel_iv %>%
+  mutate(
+    all_10k    = foreign_flow_3y      / 10000,
+    low_A_10k  = d_fb_low_skill_a_3y  / 10000,
+    high_A_10k = d_fb_high_skill_a_3y / 10000,
+    low_B_10k  = d_fb_low_skill_b_3y  / 10000,
+    high_B_10k = d_fb_high_skill_b_3y / 10000
+  )
+# 1: Total inflow × Hispanic ancestry
+ols_total_ancestry <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + white_share + native_lt_hs_share +
+    all_10k * hispanic_native_share |
+    county_fips + YEAR,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+# 2a: Low-skill inflow (A) × Hispanic ancestry
+ols_low_A_ancestry <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + white_share + native_lt_hs_share +
+    low_A_10k * hispanic_native_share |
+    county_fips + YEAR,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+# 2b: Low-skill inflow (B) × Hispanic ancestry
+ols_low_B_ancestry <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + white_share + native_lt_hs_share +
+    low_B_10k * hispanic_native_share |
+    county_fips + YEAR,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+# 3a: High-skill inflow (A) × Hispanic ancestry
+ols_high_A_ancestry <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + white_share + native_lt_hs_share +
+    high_A_10k * hispanic_native_share |
+    county_fips + YEAR,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+# 3b: High-skill inflow (B) × Hispanic ancestry
+ols_high_B_ancestry <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + white_share + native_lt_hs_share +
+    high_B_10k * hispanic_native_share |
+    county_fips + YEAR,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+
 
 
