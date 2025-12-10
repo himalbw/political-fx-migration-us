@@ -284,14 +284,14 @@ dem_controls <- cy %>% mutate(election_year = ifelse(YEAR < 2023, YEAR, 2024)) %
 panel_iv <- panel_iv %>% left_join(dem_controls, by = c("county_fips", "YEAR" = "election_year"))
 
 iv_total <- feols(
-  gop_two_party_share ~ gop_two_party_share_lag4 + pop_total + hispanic_native_share + white_share + native_lt_hs_share |
+  gop_two_party_share ~ gop_two_party_share_lag4  + log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share |
     county_fips + YEAR |
     foreign_flow_3y ~ Z,
   data    = panel_iv,
   cluster = ~county_fips
 )
 iv_low_A <- feols(
-  gop_two_party_share ~ gop_two_party_share_lag4 + pop_total + hispanic_native_share + white_share + native_lt_hs_share |
+  gop_two_party_share ~ gop_two_party_share_lag4  + log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share |
     county_fips + YEAR |
     d_fb_low_skill_a_3y ~ Z_lowa,
   data    = panel_iv,
@@ -300,7 +300,7 @@ iv_low_A <- feols(
 
 
 iv_high_A <- feols(
-  gop_two_party_share ~ gop_two_party_share_lag4 + pop_total + hispanic_native_share + white_share + native_lt_hs_share |
+  gop_two_party_share ~ gop_two_party_share_lag4  + log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share |
     county_fips + YEAR |
     d_fb_high_skill_a_3y ~ Z_higha,
   data    = panel_iv,
@@ -308,7 +308,7 @@ iv_high_A <- feols(
 )
 
 iv_low_B <- feols(
-  gop_two_party_share ~ gop_two_party_share_lag4 + pop_total + hispanic_native_share + white_share + native_lt_hs_share |
+  gop_two_party_share ~ gop_two_party_share_lag4  + log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share |
     county_fips + YEAR |
     d_fb_low_skill_b_3y ~ Z_lowb,
   data    = panel_iv,
@@ -316,7 +316,7 @@ iv_low_B <- feols(
 )
 
 iv_high_B <- feols(
-  gop_two_party_share ~ gop_two_party_share_lag4 + pop_total + hispanic_native_share + white_share + native_lt_hs_share  |
+  gop_two_party_share ~ gop_two_party_share_lag4 + log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share  |
     county_fips + YEAR |
     d_fb_high_skill_b_3y ~ Z_highb,
   data    = panel_iv,
@@ -326,19 +326,19 @@ iv_high_B <- feols(
 
 two_sls_models <- list(
   "Total inflow (IV)"         = iv_total,
-  "High-skill inflow A (IV)"  = iv_high_A,
   "Low-skill inflow A (IV)"   = iv_low_A,
   "Low-skill inflow B (IV)"   = iv_low_B,
+  "High-skill inflow A (IV)"  = iv_high_A,
   "High-skill inflow B (IV)"  = iv_high_B
 )
 
 coef_map <- c(
   # fitted IV coefficients
   "fit_foreign_flow_3y"       = "Total foreign inflow (3y)",
-  "fit_d_fb_high_skill_a_3y"  = "High-skill inflow, A (3y)",
-  "fit_d_fb_low_skill_a_3y"   = "Low-skill inflow, A (3y)",
-  "fit_d_fb_low_skill_b_3y"   = "Low-skill inflow, B (3y)",
-  "fit_d_fb_high_skill_b_3y"  = "High-skill inflow, B (3y)",
+  "fit_d_fb_high_skill_a_3y"  = "High-skill inflow (3Y)",
+  "fit_d_fb_low_skill_a_3y"   = "Low-skill inflow (3Y)",
+  "fit_d_fb_low_skill_b_3y"   = "Low-skill inflow (3Y)",
+  "fit_d_fb_high_skill_b_3y"  = "High-skill inflow (3Y)",
   
   # controls / lag
   "gop_two_party_share_lag4"  = "GOP share, last election",
@@ -363,30 +363,166 @@ modelsummary(
   coef_omit = "pop_total|hispanic_native_share|white_share|native_lt_hs_share",
   stars     = TRUE,
   fmt       = sci_fmt,
-  gof_omit  = "IC|Log|Adj|Pseudo",
+  gof_omit  = "IC|Log|Adj|Pseudo|RMSE",
   output    = "./output/tables/2sls_results_with24.html",
   title     = "2SLS Estimates: Immigration Inflows and GOP Two-Party Vote Share (Election Years)"
 )
+
+panel_iv <- panel_iv %>%
+  mutate(
+    foreign_flow_3y_10k       = foreign_flow_3y       / 10000,
+    d_fb_low_skill_a_3y_10k   = d_fb_low_skill_a_3y   / 10000,
+    d_fb_high_skill_a_3y_10k  = d_fb_high_skill_a_3y  / 10000,
+    d_fb_low_skill_b_3y_10k   = d_fb_low_skill_b_3y   / 10000,
+    d_fb_high_skill_b_3y_10k  = d_fb_high_skill_b_3y  / 10000
+  )
+
+iv_total_10k <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + log(pop_total) +
+    hispanic_native_share + white_share + native_lt_hs_share |
+    county_fips + YEAR |
+    foreign_flow_3y_10k ~ Z,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+iv_low_A_10k <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + log(pop_total) +
+    hispanic_native_share + white_share + native_lt_hs_share |
+    county_fips + YEAR |
+    d_fb_low_skill_a_3y_10k ~ Z_lowa,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+iv_high_A_10k <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + log(pop_total) +
+    hispanic_native_share + white_share + native_lt_hs_share |
+    county_fips + YEAR |
+    d_fb_high_skill_a_3y_10k ~ Z_higha,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+iv_low_B_10k <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + log(pop_total) +
+    hispanic_native_share + white_share + native_lt_hs_share |
+    county_fips + YEAR |
+    d_fb_low_skill_b_3y_10k ~ Z_lowb,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+iv_high_B_10k <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + log(pop_total) +
+    hispanic_native_share + white_share + native_lt_hs_share |
+    county_fips + YEAR |
+    d_fb_high_skill_b_3y_10k ~ Z_highb,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+two_sls_models_10k <- list(
+  "Total inflow (IV)"         = iv_total_10k,
+  "Low-skill inflow A (IV)"   = iv_low_A_10k,
+  "Low-skill inflow B (IV)"   = iv_low_B_10k,
+  "High-skill inflow A (IV)"  = iv_high_A_10k,
+  "High-skill inflow B (IV)"  = iv_high_B_10k
+)
+
+coef_map_10k <- c(
+  # fitted IV coefficients
+  "fit_foreign_flow_3y_10k"       = "Total inflow (3Y) per 10,000",
+  "fit_d_fb_high_skill_a_3y_10k"  = "High-skill inflow (3Y) / 10,000",
+  "fit_d_fb_low_skill_a_3y_10k"   = "Low-skill inflow (3Y) / 10,000",
+  "fit_d_fb_low_skill_b_3y_10k"   = "Low-skill inflow (3Y) / 10,000",
+  "fit_d_fb_high_skill_b_3y_10k"  = "High-skill inflow (3Y) / 10,000",
+  
+  # controls / lag (if you want to show them)
+  "gop_two_party_share_lag4"      = "GOP share, last election",
+  "log(pop_total)"                = "log(Population)",
+  "hispanic_native_share"         = "Hispanic native share",
+  "white_share"                   = "White share",
+  "native_lt_hs_share"            = "Native <HS share"
+)
+
+dir.create("./output/tables", recursive = TRUE, showWarnings = FALSE)
+
+two_sls_models_10k <- list(
+  "Total inflow (IV)"         = iv_total_10k,
+  "A"   = iv_low_A_10k,
+  "Low-skill inflow B (IV)"   = iv_low_B_10k,
+  "High-skill inflow A (IV)"  = iv_high_A_10k,
+  "High-skill inflow B (IV)"  = iv_high_B_10k
+)
+
+
+modelsummary(
+  two_sls_models_10k,
+  coef_map  = coef_map_10k,
+  coef_omit = "log\\(pop_total\\)|hispanic_native_share|white_share|native_lt_hs_share",
+  stars     = TRUE,
+  gof_omit  = "IC|Log|Adj|Pseudo|RMSE",
+  output    = "./output/tables/2sls_results_10k.html",
+  title     = "2SLS Estimates: 10,000-Person Migrant Inflows and GOP Two-Party Vote Share"
+)
+
+iv_A_both_10k <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + log(pop_total) +
+    hispanic_native_share + white_share + native_lt_hs_share |
+    county_fips + YEAR |
+    d_fb_low_skill_a_3y_10k + d_fb_high_skill_a_3y_10k ~
+    Z_lowa               + Z_higha,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+iv_B_both_10k <- feols(
+  gop_two_party_share ~ gop_two_party_share_lag4 + log(pop_total) +
+    hispanic_native_share + white_share + native_lt_hs_share |
+    county_fips + YEAR |
+    d_fb_low_skill_b_3y_10k + d_fb_high_skill_b_3y_10k ~
+    Z_lowb               + Z_highb,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+two_sls_models_both_10k <- list(
+  "Low & High inflow (A, IV)" = iv_A_both_10k,
+  "Low & High inflow (B, IV)" = iv_B_both_10k
+)
+
+modelsummary(
+  two_sls_models_both_10k,
+  coef_map  = coef_map_10k,
+  coef_omit = "log\\(pop_total\\)|hispanic_native_share|white_share|native_lt_hs_share",
+  stars     = TRUE,
+  gof_omit  = "IC|Log|Adj|Pseudo|RMSE",
+  output    = "./output/tables/2sls_results_10k_both.html",
+  title     = "2SLS Estimates: Low- and High-Skill Migrant Inflows (per 10,000) and GOP Two-Party Vote Share"
+)
+
+
 
 ### YEAR VARYING EFFECTS
 
 panel_fs_pred <- panel_fs %>%
   mutate(
-    fit_overall = predict(fs_overall, newdata = panel_fs),
-    fit_low_A   = predict(fs_low_A,   newdata = panel_fs),
-    fit_high_A  = predict(fs_high_A,  newdata = panel_fs),
-    fit_low_B   = predict(fs_low_B,   newdata = panel_fs),
-    fit_high_B  = predict(fs_high_B,  newdata = panel_fs)
+    fit_overall_10k = predict(fs_overall, newdata = panel_fs)/10000,
+    fit_low_A_10k   = predict(fs_low_A,   newdata = panel_fs)/10000,
+    fit_high_A_10k  = predict(fs_high_A,  newdata = panel_fs)/10000,
+    fit_low_B_10k   = predict(fs_low_B,   newdata = panel_fs)/10000,
+    fit_high_B_10k  = predict(fs_high_B,  newdata = panel_fs)/10000
   )
 fits_df <- panel_fs_pred %>%
   select(
     county_fips,
     YEAR,
-    fit_overall,
-    fit_low_A,
-    fit_high_A,
-    fit_low_B,
-    fit_high_B
+    fit_overall_10k,
+    fit_low_A_10k,
+    fit_high_A_10k,
+    fit_low_B_10k,
+    fit_high_B_10k
   ) %>%
   mutate(
     county_fips = as.integer(county_fips),
