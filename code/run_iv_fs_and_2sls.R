@@ -175,7 +175,7 @@ modelsummary(
   coef_omit = "Intercept",                 # hide intercept if present
   stars     = TRUE,
   #fmt       = sci_fmt,
-  gof_omit  = "IC|Log|Adj|Pseudo",
+  gof_omit  = "IC|Log|Adj|Pseudo|RMSE|AIC|BIC",
   output    = "./output/tables/first_stage_results_with24.html",
   title     = "First Stage Regressions: Shift-Share for 3-Year Inflows"
 )

@@ -1,11 +1,318 @@
 df <- read_csv("./data/panel_iv.csv")
 
-# scale main vars so they can be per 100k
-df$all <- df$foreign_flow_3y*10000  
-df$low_A <- df$d_fb_low_skill_a_3y*10000
-df$high_A <- df$d_fb_high_skill_a_3y*10000
-df$low_B <- df$d_fb_low_skill_b_3y*10000
-df$high_B <- df$d_fb_high_skill_b_3y*10000
+# scale main vars so they can be per 10k
+df$all    <- df$foreign_flow_3y      / 10000
+df$low_A  <- df$d_fb_low_skill_a_3y  / 10000
+df$high_A <- df$d_fb_high_skill_a_3y / 10000
+df$low_B  <- df$d_fb_low_skill_b_3y  / 10000
+df$high_B <- df$d_fb_high_skill_b_3y / 10000
 
+
+m1_overall <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    all |
+    county_fips + YEAR,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+m2a_low_A <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    low_A |
+    county_fips + YEAR,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+m2b_low_B <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    low_B |
+    county_fips + YEAR,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+m3a_high_A <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    high_A |
+    county_fips + YEAR,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+m3b_high_B <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    high_B |
+    county_fips + YEAR,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+# Make sure the directory exists
+dir.create("output/tables", recursive = TRUE, showWarnings = FALSE)
+
+coef_map <- c(
+  "all"    = "Δ Migrant Stock (3Y) per 10,000",
+  "low_A"  = "Δ Low-Skill Migrant Stock (3Y) per 10,000",
+  "low_B"  = "Δ Low-Skill Migrant Stock (3Y) per 10,000",
+  "high_A" = "Δ High-Skill Migrant Stock (3Y) per 10,000",
+  "high_B" = "Δ High-Skill Migrant Stock (3Y) per 10,000"
+)
+
+coef_omit <- "gop_two_party_share_lag4|pop_total|hispanic_native_share|white_share|native_lt_hs_share|Intercept"
+
+modelsummary(
+  list(
+    "1"  = m1_overall,
+    "2A" = m2a_low_A,
+    "2B" = m2b_low_B,
+    "3A" = m3a_high_A,
+    "3B" = m3b_high_B
+  ),
+  coef_map  = coef_map,
+  coef_omit = coef_omit,
+  stars = TRUE,
+  output    = "output/tables/baseline_1.html", 
+)
+
+## V2. INCLUDE BOTH 
+
+m1 <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    all |
+    county_fips + YEAR,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+m2b <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    low_B + high_B |
+    county_fips + YEAR,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+m3a <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    high_A  + low_A|
+    county_fips + YEAR,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+# Make sure the directory exists
+dir.create("output/tables", recursive = TRUE, showWarnings = FALSE)
+
+coef_map <- c(
+  "all"    = "Δ Migrant Stock (3Y) per 10,000",
+  "low_A"  = "Δ Low-Skill Migrant Stock (3Y) per 10,000",
+  "low_B"  = "Δ Low-Skill Migrant Stock (3Y) per 10,000",
+  "high_A" = "Δ High-Skill Migrant Stock (3Y) per 10,000",
+  "high_B" = "Δ High-Skill Migrant Stock (3Y) per 10,000"
+)
+
+coef_omit <- "gop_two_party_share_lag4|pop_total|hispanic_native_share|white_share|native_lt_hs_share|Intercept"
+
+modelsummary(
+  list(
+    "1"  = m1,
+    "2A" = m2b,
+    "2B" = m3a
+  ),
+  coef_map  = coef_map,
+  coef_omit = coef_omit,
+  gof_omit  = "R2|RMSE|AIC|BIC",
+  stars = TRUE,
+  output    = "output/tables/baseline_1_bothHSLS.html", 
+)
+
+
+# 2. Models with skill split A × YEAR interactions
+
+# Low-skill A: effect allowed to vary by year
+m2A_low_A_year <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    pop_total + hispanic_native_share + white_share + native_lt_hs_share +
+    low_A * factor(YEAR) +              # main low_A + YEAR dummies + interactions
+    0 |                                 # no additional regressors on RHS here
+    county_fips,                        # county FE
+  data    = df,
+  cluster = ~ county_fips
+)
+
+# High-skill A: effect allowed to vary by year
+m3A_high_A_year <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    pop_total + hispanic_native_share + white_share + native_lt_hs_share +
+    high_A * factor(YEAR) +
+    0 |
+    county_fips,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+# Optional: combined model with both low_A and high_A interacted with YEAR
+mA_both_year <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    pop_total + hispanic_native_share + white_share + native_lt_hs_share +
+    low_A  * factor(YEAR) +
+    high_A * factor(YEAR) +
+    0 |
+    county_fips,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+# ---------------------------------------------
+# 2. Table for the year-interaction models
+#    (you can refine coef_map later for plotting)
+# ---------------------------------------------
+
+dir.create("output/tables", recursive = TRUE, showWarnings = FALSE)
+
+coef_map_year <- c(
+  "low_A"  = "Δ Skilled Migrant Stock (3Y) per 10,000",
+  "high_A" = "Δ Skilled Migrant Stock (3Y) per 10,000",
+  "low_A:factor(YEAR)2012" = "Δ Migrants x 2012",
+  "low_A:factor(YEAR)2016" = "Δ Migrants x 2016",
+  "low_A:factor(YEAR)2020" = "Δ Migrants x 2020",
+  "low_A:factor(YEAR)2024" = "Δ Migrants x 2024",
+  "high_A:factor(YEAR)2012" = "Δ Migrants x 2012",
+  "high_A:factor(YEAR)2016" = "Δ Migrants x 2016",
+  "high_A:factor(YEAR)2020" = "Δ Migrants x 2020",
+  "high_A:factor(YEAR)2024" = "Δ Migrants x 2024")
+
+
+coef_omit_year <- paste(
+  "gop_two_party_share_lag4",
+  "pop_total",
+  "hispanic_native_share",
+  "white_share",
+  "native_lt_hs_share",
+  "factor\\(YEAR\\)",   # omit the plain year dummies from display
+  "Intercept",
+  sep = "|"
+)
+
+modelsummary(
+  list(
+    "2A (Low-skill A × Year)"  = m2A_low_A_year,
+    "3A (High-skill A × Year)" = m3A_high_A_year
+  ),
+  coef_map  = coef_map_year,
+  coef_omit = "gop_two_party_share_lag4|pop_total|hispanic_native_share|white_share|native_lt_hs_share|Intercept",
+  stars     = TRUE,
+  gof_omit  = "R2|RMSE|AIC|BIC",
+  title     = "Model 2: Year-Varying Effects of Skill-Split A Migrant Inflows (per 10,000) on GOP Two-Party Vote Share",
+  notes     = "Coefficients reported reflect the change in GOP two-party vote share associated with a 10,000-person increase in 3-year migrant inflows; interaction terms reflect year-specific effects.",
+  output    = "output/tables/baseline_2_skillA_year.html"
+)
+
+
+# 2. Models with skill split A × YEAR interactions
+
+mA_both_year <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    low_A  * factor(YEAR) +
+    high_A * factor(YEAR) |
+    county_fips,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+summary(mA_both_year)
+
+mB_both_year <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    low_B  * factor(YEAR) +
+    high_B * factor(YEAR) |
+    county_fips,
+  data    = df,
+  cluster = ~ county_fips
+)
+
+summary(mB_both_year)
+
+
+coef_map_year <- c(
+  # main effects
+  "low_A"   = "Δ Low-skill per 10,000",
+  "high_A"  = "Δ High-skill per 10,000",
+  "low_B"   = "Δ Low-skill per 10,000",
+  "high_B"  = "Δ High-skill per 10,000",
+  
+  # interactions – low skill A
+  "low_A:factor(YEAR)2012" = "Low-skill × 2012",
+  "low_A:factor(YEAR)2016" = "Low-skill × 2016",
+  "low_A:factor(YEAR)2020" = "Low-skill × 2020",
+  "low_A:factor(YEAR)2024" = "Low-skill × 2024",
+  
+  # interactions – high skill A
+  "factor(YEAR)2012:high_A" = "High-skill × 2012",
+  "factor(YEAR)2016:high_A" = "High-skill × 2016",
+  "factor(YEAR)2020:high_A" = "High-skill × 2020",
+  "factor(YEAR)2024:high_A" = "High-skill × 2024",
+  
+  # interactions – low skill B
+  "low_B:factor(YEAR)2012" = "Low-skill × 2012",
+  "low_B:factor(YEAR)2016" = "Low-skill × 2016",
+  "low_B:factor(YEAR)2020" = "Low-skill × 2020",
+  "low_B:factor(YEAR)2024" = "Low-skill × 2024",
+  
+  # interactions – high skill B    ← ***THESE ARE THE ONES YOU NEED***
+  "factor(YEAR)2012:high_B" = "High-skill × 2012",
+  "factor(YEAR)2016:high_B" = "High-skill × 2016",
+  "factor(YEAR)2020:high_B" = "High-skill × 2020",
+  "factor(YEAR)2024:high_B" = "High-skill × 2024"
+)
+
+# omit controls and plain YEAR dummies (but keep interactions)
+coef_omit_year <- paste(
+  "gop_two_party_share_lag4",
+  "log\\(pop_total\\)",
+  "hispanic_native_share",
+  "white_share",
+  "native_lt_hs_share",
+  "Intercept",
+  sep = "|"
+)
+
+modelsummary(
+  list(
+    "A: Low & High Skill (A) × Year" = mA_both_year,
+    "B: Low & High Skill (B) × Year" = mB_both_year
+  ),
+  coef_map  = coef_map_year,
+  coef_omit = coef_omit_year,
+  stars     = TRUE,
+  gof_omit  = "R2|RMSE|AIC|BIC",
+  title     = "Model 2: Year-Varying Effects of Low- and High-Skill Migrant Inflows (per 10,000) on GOP Two-Party Vote Share",
+  notes     = "Flows are scaled so coefficients represent the change in GOP two-party vote share associated with a 10,000-person increase in 3-year migrant inflows. Interaction terms capture year-specific effects by skill group.",
+  output    = "output/tables/baseline_2_skillAB_year.html"
+)
 
 
