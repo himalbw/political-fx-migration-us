@@ -315,4 +315,84 @@ modelsummary(
   output    = "output/tables/baseline_2_skillAB_year.html"
 )
 
+panel_iv <- read_csv(".data/panel_iv.csv")
+panel_iv <- panel_iv %>%
+  mutate(
+    all_10k    = foreign_flow_3y      / 10000,
+    low_A_10k  = d_fb_low_skill_a_3y  / 10000,
+    high_A_10k = d_fb_high_skill_a_3y / 10000,
+    low_B_10k  = d_fb_low_skill_b_3y  / 10000,
+    high_B_10k = d_fb_high_skill_b_3y / 10000
+  )
+# (1) Overall inflow × Trump
+m_total_trump_ols <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    all_10k * factor(trump) |
+    county_fips,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+# (2) Low & High skill, split A × Trump
+mA_both_trump_ols <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    low_A_10k  * factor(trump) +
+    high_A_10k * factor(trump) |
+    county_fips,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+
+# (3) Low & High skill, split B × Trump
+mB_both_trump_ols <- feols(
+  gop_two_party_share ~
+    gop_two_party_share_lag4 +
+    log(pop_total) + hispanic_native_share + white_share + native_lt_hs_share +
+    low_B_10k  * factor(trump) +
+    high_B_10k * factor(trump) |
+    county_fips,
+  data    = panel_iv,
+  cluster = ~ county_fips
+)
+ols_trump_models <- list(
+  "1"   = m_total_trump_ols,
+  "2a: Low & High A × Trump"  = mA_both_trump_ols,
+  "2b: Low & High B × Trump"  = mB_both_trump_ols
+)
+
+# Map coefficients to nice labels
+coef_map_ols_trump <- c(
+  # total inflow
+  "all_10k"                     = "Total Inflow (3Y, per 10k)",
+  "all_10k:factor(trump)1"     = "Total Inflow × Trump",
+  
+  # low/high A
+  "low_A_10k"                   = "Low-Skill Inflow",
+  "low_A_10k:factor(trump)1"    = "Low-Skill Inflow × Trump",
+  "high_A_10k"                  = "High-Skill Inflow",
+  "factor(trump)1:high_A_10k"   = "High-Skill Inflow × Trump",
+  
+  # low/high B
+  "low_B_10k"                   = "Low-Skill Inflow",
+  "low_B_10k:factor(trump)1"    = "Low-Skill Inflow × Trump",
+  "high_B_10k"                  = "High-Skill Inflow",
+  "factor(trump)1:high_B_10k"   = "High-Skill Inflow × Trump"
+)
+
+coef_omit_ols_trump <- "gop_two_party_share_lag4|log\\(pop_total\\)|hispanic_native_share|white_share|native_lt_hs_share|Intercept"
+
+modelsummary(
+  ols_trump_models,
+  coef_map  = coef_map_ols_trump,
+  coef_omit = coef_omit_ols_trump,
+  stars     = TRUE,
+  gof_omit  = "IC|Log|Adj|Pseudo|RMSE",
+  title     = "OLS: Fitted 3-Year Migrant Inflows and Trump-Era Differences in GOP Vote Share",
+  output    = "output/tables/ols_trump_interactions.html"
+)
+
 
